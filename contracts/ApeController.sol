@@ -4,7 +4,7 @@ import "./interfaces/IVault.sol";
 
 /// @title Ape2Gether Controller
 /// @author Chainvisions
-/// @notice Controller contract for Ape2gether vaults.
+/// @notice Controller contract for Ape2Gether vaults.
 contract ApeController {
     struct VaultData {
         string name;            // Name of the vault.

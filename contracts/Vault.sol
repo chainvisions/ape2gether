@@ -7,11 +7,12 @@ import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.so
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/SafeERC20.sol";
 import "./interfaces/IApeController.sol";
 import "./interfaces/IVault.sol";
+import "./interfaces/IStrategy.sol";
 import "./VaultStorage.sol";
 
 /// @title Ape2Gether Vault Implementation.
 /// @author Chainvisions
-/// @notice Implementation contract for Ape2gether vaults.
+/// @notice Implementation contract for Ape2Gether vaults.
 
 contract Vault is ERC20, ERC20Detailed, IVault, VaultStorage {
     using SafeMath for uint256;
@@ -34,6 +35,7 @@ contract Vault is ERC20, ERC20Detailed, IVault, VaultStorage {
         _deposit(msg.sender, msg.sender, _amount);
     }
 
+    /// @dev Internal function for handling deposits.
     function _deposit(address _from, address _for, uint256 _amount) internal defense {
         require(_amount > 0, "Vault: Cannot deposit 0");
     }
@@ -58,12 +60,15 @@ contract Vault is ERC20, ERC20Detailed, IVault, VaultStorage {
             IERC20(underlying()).safeTransfer(msg.sender, _liquidity);
             return uint256(Exit.Covered);
         }
-
     }
 
     /// @dev Claims vault rewards.
     function claim() public {
         
+    }
+
+    function apeIn() public defense {
+        IStrategy(strategy()).apeIn();
     }
 
     function underlying() public view returns (address) {
@@ -72,6 +77,10 @@ contract Vault is ERC20, ERC20Detailed, IVault, VaultStorage {
 
     function controller() public view returns (address) {
         return _controller();
+    }
+
+    function strategy() public view returns (address) {
+        return _strategy();
     }
 
     function availableLiquidity() public view returns (uint256) {
